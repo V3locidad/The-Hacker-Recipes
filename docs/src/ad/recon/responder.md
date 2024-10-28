@@ -23,3 +23,16 @@ responder -I "eth0" -A
 ```
 
 [https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/responder-20-owning-windows-networks-part-3/](https://www.trustwave.com/en-us/resources/blogs/spiderlabs-blog/responder-20-owning-windows-networks-part-3/)
+
+## Tips & tricks
+
+> [!TIP]
+> * If you're running Responder on macOS, it might not function fully—it will receive NBT requests but may not proceed further.
+> * To fix this, simply check your Mac's IP address on your local network and add the option `--externalip=`
+>
+> ```bash
+> responder --interface "$INTERFACE" --externalip=$YOURLOCALNETWORKIP
+> ```
+
+
+
