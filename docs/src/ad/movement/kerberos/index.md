@@ -199,3 +199,32 @@ This allows to
 * retrieve and decrypt the PAC (Privileged Attribute Certificate) of any account. Could be used to obtain a [sapphire ticket](forged-tickets/sapphire.md).
 :::
 
+## Tips & tricks
+
+> [!TIP]
+> Change a container’s time
+> When running multiple Active Directory tools in a Docker environment, a common issue is the appearance of this error message:
+>
+> ```bash
+> Kerberos SessionError: KRB_AP_ERR_SKEW (Clock skew too great)
+> ```
+> 
+> This error typically occurs because the time in the Docker container is not perfectly synchronized with the AD server, leading to a mismatch that Kerberos interprets as a "clock skew."
+> To fix this, you can use the faketime command to adjust the container's time and eliminate the discrepancy.
+>
+> Faketime manipulates the system time for a given child command. For example with zsh, a new shell is opened with a spoofed time that will only be spoofed for this extact shell session
+> and commands executed in it.
+> 
+> ```bash
+> faketime 'YYYY-MM-DD hh:mm:ss' zsh
+> ```
+>
+> The following examples automate the synchronization of a remote domain controller’s clock to initiate a corresponding zsh session.
+>
+> ```bash
+> faketime "$(rdate -n $DC_IP -p | awk '{print $2, $3, $4}' | date -f - "+%Y-%m-%d %H:%M:%S")" zsh
+> ```
+>
+> ```bash
+> faketime "$(date +'%Y-%m-%d') $(net time -S $DC_IP | awk '{print $4}')"
+> ```
